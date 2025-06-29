@@ -9,6 +9,11 @@ A Discord bot that displays real-time server statistics for the Freya server in 
 
 [View Server Stat Details](./server-stat/README.md)
 
+### coriolis-storm
+A Discord bot that displays a countdown timer to the next Apex Storm in Apex Legends. The bot updates its status every 15 seconds showing the days, hours, minutes, and seconds until the next storm, which occurs every Tuesday at 4 AM MT.
+
+[View Coriolis Storm Details](./coriolis-storm/README.md)
+
 ## Requirements
 
 - Node.js v18 or higher
