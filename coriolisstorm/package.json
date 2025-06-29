@@ -1,0 +1,25 @@
+{
+  "name": "coriolisstorm-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot that displays the time until the Apex of the Coriolisstorm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "discord.js",
+    "dune",
+    "dune-awakening"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
