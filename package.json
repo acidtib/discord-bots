@@ -1,0 +1,26 @@
+{
+  "name": "freya-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot that displays real-time server statistics for the Freya server in Dune: Awakening",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "discord.js",
+    "dune",
+    "dune-awakening",
+    "server-status"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
