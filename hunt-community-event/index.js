@@ -72,6 +72,21 @@ client.on(Events.ClientReady, async () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   const updateServerStatus = async () => {
+    // check if event is active
+    const isEventActive = process.env.HUNT_EVENT_ACTIVE !== "false";
+
+    if (!isEventActive) {
+      client.user.setActivity({
+        name: "Starting Soon",
+        type: ActivityType.Custom,
+      });
+
+      client.application.edit({
+        description: "Event starting soon - stay tuned!",
+      });
+      return;
+    }
+
     const eventFunction = eventFunctions[eventData.slug];
     if (!eventFunction) {
       console.error(`Event function not found for: ${eventData.slug}`);
