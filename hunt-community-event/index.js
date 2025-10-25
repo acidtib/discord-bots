@@ -11,7 +11,8 @@ const client = new Client({
 async function event_bloodshed_bileweavers() {
   console.log("Event: Bloodshed Bileweavers");
 
-  const eventUrl = `https://www.huntshowdown.com/community/bloodshed-bileweavers`;
+  const eventUrl =
+    "https://www.huntshowdown.com/community/bloodshed-bileweavers";
 
   const html = await (await fetch(eventUrl)).text();
 
@@ -61,9 +62,31 @@ async function event_bloodshed_bileweavers() {
   };
 }
 
+async function event_death_rites() {
+  console.log("Death Rites event started");
+
+  const eventUrl = "https://www.huntshowdown.com/community/death-rites";
+
+  const html = await (await fetch(eventUrl)).text();
+
+  // extract data
+  const theLastRites = html.match(
+    /<div class="d-number" id="d-counter2" data-value="(\d+)">/,
+  )[1];
+  const theUnQuietDead = html.match(
+    /<div class="d-number" id="d-counter1" data-value="(\d+)">/,
+  )[1];
+
+  return {
+    status: `TLR ${parseInt(theLastRites).toLocaleString()} | TUD ${parseInt(theUnQuietDead).toLocaleString()}`,
+    description: `The Last Rites: ${parseInt(theLastRites).toLocaleString()}\nThe Unquiet Dead: ${parseInt(theUnQuietDead).toLocaleString()} \n${eventUrl}`,
+  };
+}
+
 // event function mapping
 const eventFunctions = {
   bloodshed_bileweavers: event_bloodshed_bileweavers,
+  death_rites: event_death_rites,
   // add future events here
   // example: another_event: event_another_event,
 };
