@@ -1,6 +1,8 @@
+import "dotenv/config";
 import { Client, Events, GatewayIntentBits, ActivityType } from "discord.js";
 import { readdir, stat } from "fs/promises";
 import { join, extname } from "path";
+import Logger from "./lib/logger";
 
 const eventData = {
   slug: process.env.HUNT_EVENT_SLUG,
