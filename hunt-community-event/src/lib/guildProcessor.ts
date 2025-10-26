@@ -31,7 +31,6 @@ export async function processGuild(guild: Guild) {
       });
     }
 
-    Logger.info(`Successfully processed guild: ${guild.id}, ${guild.name}`);
   } catch (error) {
     Logger.error(`Error processing guild: ${guild.id}, ${guild.name}. Error: ${error instanceof Error ? error.message : String(error)}`);
   }

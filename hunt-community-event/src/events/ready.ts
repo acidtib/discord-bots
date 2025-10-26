@@ -1,7 +1,8 @@
-import { Events, Client } from 'discord.js';
+import { Events, Client, ActivityType } from 'discord.js';
 import prisma from '../lib/prisma.ts';
 import { processGuild } from '../lib/guildProcessor.ts';
 import { Logger } from '../lib/logger.ts';
+import { HuntEvent } from '../lib/huntEvent/index.ts';
 
 export default {
 	name: Events.ClientReady,
@@ -14,5 +15,22 @@ export default {
 		for (const [guildId, guild] of client.guilds.cache) {
 			await processGuild(guild);
 		}
+
+		// check if event is active
+    const isEventActive = process.env.HUNT_EVENT_ACTIVE !== "false";
+    if (!isEventActive) {
+      client.user.setActivity({
+        name: "Starting Soon",
+        type: ActivityType.Custom,
+      });
+
+      client.application.edit({
+        description: "Event starting soon - stay tuned!",
+      });
+      return;
+    }
+
+    // start tracking event
+		HuntEvent.execute(client);
 	},
 };
