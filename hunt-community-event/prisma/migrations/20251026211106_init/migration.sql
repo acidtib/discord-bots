@@ -15,6 +15,3 @@ CREATE TABLE "Guild" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Guild_discordId_key" ON "Guild"("discordId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Guild_ownerId_key" ON "Guild"("ownerId");

@@ -17,7 +17,7 @@ datasource db {
 model Guild {
   id    Int     @id @default(autoincrement())
   discordId String  @unique
-  ownerId String  @unique
+  ownerId String
   name  String?
   icon  String?
   active  Boolean @default(true)
