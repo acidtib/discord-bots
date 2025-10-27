@@ -30,7 +30,15 @@ export default {
       return;
     }
 
-    // start tracking event
-		HuntEvent.execute(client);
+    const updateServerStatus = async () => {
+      // start tracking event
+  		await HuntEvent.execute(client);
+    };
+
+    // Set initial status
+    updateServerStatus();
+
+    // Update status every 15 minutes
+    setInterval(updateServerStatus, 900000);
 	},
 };

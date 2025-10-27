@@ -1,13 +1,16 @@
 import { ActivityType } from "discord.js";
-import { EventDeathRites } from './deathRites';
 import { Logger } from '../logger'
+
+// hunt events
+import { EventDeathRites } from './deathRites';
+import { EventBloodshedBileweavers } from './bloodshedBileweavers';
 
 export class HuntEvent {
 
   static async execute(client) {
     // event calss mapping
     const eventClasses = {
-      // bloodshed_bileweavers: event_bloodshed_bileweavers,
+      bloodshed_bileweavers: EventBloodshedBileweavers,
       death_rites: EventDeathRites,
       // add future events here
       // example: another_event: event_another_event,
