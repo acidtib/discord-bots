@@ -27,13 +27,13 @@ export class EventBloodshedBileweavers {
       // Stage 2
       stage = 2;
       progress = current - stage1;
-      maxForStage = stage2 - stage1;
+      maxForStage = stage2;
       percentage = Math.floor((progress / maxForStage) * 100);
     } else if (current < stage3) {
       // Stage 3
       stage = 3;
       progress = current - stage2;
-      maxForStage = stage3 - stage2;
+      maxForStage = stage3;
       percentage = Math.floor((progress / maxForStage) * 100);
     } else {
       // Completed all stages
