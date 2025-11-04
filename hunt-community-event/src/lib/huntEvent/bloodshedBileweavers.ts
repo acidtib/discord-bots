@@ -1,6 +1,5 @@
-import { isDeepStrictEqual } from "util";
 import Logger from "../logger";
-import prisma from "../prisma";
+import { saveEventData } from "./saveEventData";
 
 export class EventBloodshedBileweavers {
 
@@ -19,7 +18,6 @@ export class EventBloodshedBileweavers {
     const stage3 = parseInt(html.match(/STAGE_3_MAX\s*=\s*(\d+)/)[1]);
 
     // save to EventData if the json data is different from the last saved data
-    const botId = parseInt(process.env.HUNTCET_BOT_ID || "0");
     const payload = {
       current,
       total,
@@ -28,20 +26,7 @@ export class EventBloodshedBileweavers {
       stage3,
     };
 
-    const latest = await prisma.eventData.findFirst({
-      where: { botId },
-      orderBy: { createdAt: "desc" },
-      select: { data: true },
-    });
-
-    if (!latest || !isDeepStrictEqual(latest.data, payload)) {
-      await prisma.eventData.create({
-        data: {
-          botId,
-          data: payload,
-        },
-      });
-    }
+    await saveEventData(payload);
 
     let stage, progress, maxForStage, percentage;
     if (current < stage1) {
