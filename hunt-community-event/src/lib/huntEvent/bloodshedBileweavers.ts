@@ -1,9 +1,10 @@
 import Logger from "../logger";
+import { Client } from "discord.js";
 import { saveEventData } from "./saveEventData";
 
 export class EventBloodshedBileweavers {
 
-  static async track() {
+  static async track(client?: Client) {
     Logger.info("Event: Bloodshed Bileweavers");
 
     const eventUrl = "https://www.huntshowdown.com/community/bloodshed-bileweavers";
@@ -26,7 +27,7 @@ export class EventBloodshedBileweavers {
       stage3,
     };
 
-    await saveEventData(payload);
+    await saveEventData(payload, client);
 
     let stage, progress, maxForStage, percentage;
     if (current < stage1) {

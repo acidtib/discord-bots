@@ -1,9 +1,10 @@
 import Logger from "../logger";
+import { Client } from "discord.js";
 import { saveEventData } from "./saveEventData";
 
 export class EventDeathRites {
 
-  static async track() {
+  static async track(client?: Client) {
     Logger.info("Death Rites event started");
 
     const eventUrl = "https://www.huntshowdown.com/community/death-rites";
@@ -23,7 +24,7 @@ export class EventDeathRites {
       theUnQuietDead: parseInt(theUnQuietDead || "0"),
     };
 
-    await saveEventData(payload);
+    await saveEventData(payload, client);
 
     return {
       status: `TLR ${payload.theLastRites.toLocaleString()} | TUD ${payload.theUnQuietDead.toLocaleString()}`,

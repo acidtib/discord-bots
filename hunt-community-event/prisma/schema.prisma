@@ -41,7 +41,23 @@ model Bot {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  settings GuildBotSetting[]
   eventData EventData[]
+}
+
+model GuildBotSetting {
+  id          Int      @id @default(autoincrement())
+  guildId     Int
+  botId       Int
+  postUpdates Boolean  @default(false)
+  channelId   String?
+  channelName String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bot   Bot   @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([guildId, botId])
 }
 
 model EventData {

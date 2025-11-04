@@ -24,7 +24,7 @@ export class HuntEvent {
       return;
     }
 
-    const { status, description } = await eventClass.track();
+    const { status, description } = await eventClass.track(client);
 
     client.user.setActivity({
       name: status,

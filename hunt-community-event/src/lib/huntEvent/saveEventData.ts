@@ -1,12 +1,14 @@
 import { isDeepStrictEqual } from "util";
+import { Client } from "discord.js";
 import prisma from "../prisma";
 import { Prisma } from "../../../generated/prisma/client";
+import { reportEventData } from "./reportEventData";
 
 export async function saveEventData(
   data: Record<string, unknown>,
-  botId?: number,
+  client?: Client,
 ) {
-  const resolvedBotId = botId ?? parseInt(process.env.HUNTCET_BOT_ID || "0", 10);
+  const resolvedBotId = parseInt(process.env.HUNTCET_BOT_ID || "0");
 
   const latest = await prisma.eventData.findFirst({
     where: { botId: resolvedBotId },
@@ -21,6 +23,11 @@ export async function saveEventData(
         data: data as Prisma.InputJsonValue,
       },
     });
+
+    // Report event data changes to configured guilds
+    if (client) {
+      await reportEventData(client, data, resolvedBotId);
+    }
   }
 }
 
