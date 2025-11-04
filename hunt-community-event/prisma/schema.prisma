@@ -25,3 +25,33 @@ model Guild {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Bot {
+  id    Int     @id @default(autoincrement())
+  discordId String @unique
+  name String
+  description String
+  image String
+  status String
+  mode String
+  installUrl String
+  discordClientId String
+  discordClientSecret String
+  discordBotToken String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eventData EventData[]
+}
+
+model EventData {
+  id        Int      @id @default(autoincrement())
+  botId     Int
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bot Bot @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("event_data")
+}
