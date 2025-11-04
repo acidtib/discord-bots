@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "start": "npx tsx src/index.ts"
   },
   "keywords": [
