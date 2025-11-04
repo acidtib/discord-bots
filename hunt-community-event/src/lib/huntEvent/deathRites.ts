@@ -1,4 +1,5 @@
 import Logger from "../logger";
+import { saveEventData } from "./saveEventData";
 
 export class EventDeathRites {
 
@@ -12,14 +13,21 @@ export class EventDeathRites {
     // extract data
     const theLastRites = html.match(
       /<div class="d-number" id="d-counter2" data-value="(\d+)">/,
-    )[1];
+    )?.[1];
     const theUnQuietDead = html.match(
       /<div class="d-number" id="d-counter1" data-value="(\d+)">/,
-    )[1];
+    )?.[1];
+
+    const payload = {
+      theLastRites: parseInt(theLastRites || "0"),
+      theUnQuietDead: parseInt(theUnQuietDead || "0"),
+    };
+
+    await saveEventData(payload);
 
     return {
-      status: `TLR ${parseInt(theLastRites).toLocaleString()} | TUD ${parseInt(theUnQuietDead).toLocaleString()}`,
-      description: `The Last Rites: ${parseInt(theLastRites).toLocaleString()}\nThe Unquiet Dead: ${parseInt(theUnQuietDead).toLocaleString()} \n${eventUrl}`,
+      status: `TLR ${payload.theLastRites.toLocaleString()} | TUD ${payload.theUnQuietDead.toLocaleString()}`,
+      description: `The Last Rites: ${payload.theLastRites.toLocaleString()}\nThe Unquiet Dead: ${payload.theUnQuietDead.toLocaleString()} \n${eventUrl}`,
     };
   }
 }
