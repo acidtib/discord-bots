@@ -36,20 +36,45 @@ export class EventBloodshedBileweavers {
       select: { data: true },
     });
 
-    let shouldSave = true;
     if (latest && latest.data) {
       const lastData = latest.data as any;
       if (lastData.current) {
         if (payload.current < lastData.current) {
-          shouldSave = false;
-          Logger.info("Skipping save: new data is less than previous data");
+          Logger.info("Skipping update: new data is less than previous data");
+
+          // Calculate status using previous data
+          let stage, progress, maxForStage, percentage;
+          if (lastData.current < lastData.stage1) {
+            stage = 1;
+            progress = lastData.current;
+            maxForStage = lastData.stage1;
+            percentage = Math.floor((lastData.current / lastData.stage1) * 100);
+          } else if (lastData.current < lastData.stage1 + lastData.stage2) {
+            stage = 2;
+            progress = lastData.current;
+            maxForStage = lastData.stage2;
+            percentage = Math.floor((lastData.current / lastData.stage2) * 100);
+          } else if (lastData.current < lastData.stage1 + lastData.stage2 + lastData.stage3) {
+            stage = 3;
+            progress = lastData.current;
+            maxForStage = lastData.stage3;
+            percentage = Math.floor((lastData.current / lastData.stage3) * 100);
+          } else {
+            stage = "Complete";
+            progress = lastData.current;
+            maxForStage = lastData.total;
+            percentage = 100;
+          }
+
+          return {
+            status: `Stage ${stage} | ${percentage}% of ${maxForStage.toLocaleString()}`,
+            description: `Stage ${stage}\n${progress.toLocaleString()}/${maxForStage.toLocaleString()} (${percentage}%)\nTotal: ${lastData.current.toLocaleString()}/${lastData.total.toLocaleString()}\n\n${eventUrl}`,
+          };
         }
       }
     }
 
-    if (shouldSave) {
-      await saveEventData(payload, client);
-    }
+    await saveEventData(payload, client);
 
     let stage, progress, maxForStage, percentage;
     if (current < stage1) {

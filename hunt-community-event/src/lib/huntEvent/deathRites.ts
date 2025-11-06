@@ -39,15 +39,16 @@ export class EventDeathRites {
       if (lastData.theLastRites && lastData.theUnQuietDead) {
         if (payload.theLastRites < lastData.theLastRites ||
             payload.theUnQuietDead < lastData.theUnQuietDead) {
-          shouldSave = false;
-          Logger.info("Skipping save: new data is less than previous data");
+          Logger.info("Skipping update: new data is less than previous data");
+          return {
+            status: `TLR ${lastData.theLastRites.toLocaleString()} | TUD ${lastData.theUnQuietDead.toLocaleString()}`,
+            description: `The Last Rites: ${lastData.theLastRites.toLocaleString()}\nThe Unquiet Dead: ${lastData.theUnQuietDead.toLocaleString()} \n${eventUrl}`,
+          };
         }
       }
     }
 
-    if (shouldSave) {
-      await saveEventData(payload, client);
-    }
+    await saveEventData(payload, client);
 
     return {
       status: `TLR ${payload.theLastRites.toLocaleString()} | TUD ${payload.theUnQuietDead.toLocaleString()}`,
