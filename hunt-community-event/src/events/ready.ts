@@ -38,7 +38,7 @@ export default {
     // Set initial status
     updateServerStatus();
 
-    // Update status every 15 minutes
-    setInterval(updateServerStatus, 900000);
+    // Update status every 25 minutes
+    setInterval(updateServerStatus, 1500000);
 	},
 };

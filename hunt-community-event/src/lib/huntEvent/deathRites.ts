@@ -1,59 +1,47 @@
-import Logger from "../logger";
-import { Client } from "discord.js";
-import { saveEventData } from "./saveEventData";
-import prisma from "../prisma";
+import { BaseEventHandler, EventConfig, EventData, EventResult } from "./baseEventHandler";
 
-export class EventDeathRites {
-
-  static async track(client?: Client) {
-    Logger.info("Death Rites event started");
-
-    const eventUrl = "https://www.huntshowdown.com/community/death-rites";
-
-    const html = await (await fetch(eventUrl)).text();
-
-    // extract data
-    const theLastRites = html.match(
-      /<div class="d-number" id="d-counter2" data-value="(\d+)">/,
-    )?.[1];
-    const theUnQuietDead = html.match(
-      /<div class="d-number" id="d-counter1" data-value="(\d+)">/,
-    )?.[1];
-
-    const payload = {
-      theLastRites: parseInt(theLastRites || "0"),
-      theUnQuietDead: parseInt(theUnQuietDead || "0"),
+export class EventDeathRites extends BaseEventHandler {
+  protected getConfig(): EventConfig {
+    return {
+      eventUrl: "https://www.huntshowdown.com/community/death-rites",
+      eventName: "Death Rites",
+      extractData: this.extractData,
+      formatResult: this.formatResult,
+      validateProgress: this.validateProgress,
     };
+  }
 
-    // Check if new data is less than previously saved data
-    const resolvedBotId = parseInt(process.env.HUNTCET_BOT_ID || "0");
-    const latest = await prisma.eventData.findFirst({
-      where: { botId: resolvedBotId },
-      orderBy: { createdAt: "desc" },
-      select: { data: true },
-    });
+  private extractData(html: string): EventData {
+    const theLastRitesMatch = html.match(
+      /<div class="d-number" id="d-counter2" data-value="(\d+)">/,
+    );
+    const theUnQuietDeadMatch = html.match(
+      /<div class="d-number" id="d-counter1" data-value="(\d+)">/,
+    );
 
-    let shouldSave = true;
-    if (latest && latest.data) {
-      const lastData = latest.data as any;
-      if (lastData.theLastRites && lastData.theUnQuietDead) {
-        if (payload.theLastRites < lastData.theLastRites ||
-            payload.theUnQuietDead < lastData.theUnQuietDead) {
-          Logger.info("Skipping update: new data is less than previous data");
-          return {
-            status: `TLR ${lastData.theLastRites.toLocaleString()} | TUD ${lastData.theUnQuietDead.toLocaleString()}`,
-            description: `The Last Rites: ${lastData.theLastRites.toLocaleString()}\nThe Unquiet Dead: ${lastData.theUnQuietDead.toLocaleString()} \n${eventUrl}`,
-          };
-        }
-      }
+    if (!theLastRitesMatch || !theUnQuietDeadMatch) {
+      throw new Error("Failed to extract event data from HTML - regex patterns not found");
     }
 
-    await saveEventData(payload, client);
-
     return {
-      status: `TLR ${payload.theLastRites.toLocaleString()} | TUD ${payload.theUnQuietDead.toLocaleString()}`,
-      description: `The Last Rites: ${payload.theLastRites.toLocaleString()}\nThe Unquiet Dead: ${payload.theUnQuietDead.toLocaleString()} \n${eventUrl}`,
+      theLastRites: parseInt(theLastRitesMatch[1]),
+      theUnQuietDead: parseInt(theUnQuietDeadMatch[1]),
     };
+  }
+
+  private formatResult(data: EventData, eventUrl: string): EventResult {
+    return {
+      status: `TLR ${(data.theLastRites as number).toLocaleString()} | TUD ${(data.theUnQuietDead as number).toLocaleString()}`,
+      description: `The Last Rites: ${(data.theLastRites as number).toLocaleString()}\nThe Unquiet Dead: ${(data.theUnQuietDead as number).toLocaleString()} \n${eventUrl}`,
+    };
+  }
+
+  private validateProgress(newData: EventData, lastData: EventData): boolean {
+    if (lastData.theLastRites && lastData.theUnQuietDead) {
+      return (newData.theLastRites as number) >= (lastData.theLastRites as number) &&
+             (newData.theUnQuietDead as number) >= (lastData.theUnQuietDead as number);
+    }
+    return true;
   }
 }
 
