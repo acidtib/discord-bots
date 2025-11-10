@@ -46,13 +46,13 @@ export class EventBloodshedBileweavers extends BaseEventHandler {
       progress = current;
       maxForStage = stage1;
       percentage = Math.floor((current / stage1) * 100);
-    } else if (current < stage1 + stage2) {
+    } else if (current < stage2) {
       // Stage 2
       stage = 2;
       progress = current;
       maxForStage = stage2;
       percentage = Math.floor((current / stage2) * 100);
-    } else if (current < stage1 + stage2 + stage3) {
+    } else if (current < stage3) {
       // Stage 3
       stage = 3;
       progress = current;
