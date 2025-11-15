@@ -4,6 +4,7 @@ import { Logger } from '../logger'
 // hunt events
 import { EventDeathRites } from './deathRites';
 import { EventBloodshedBileweavers } from './bloodshedBileweavers';
+import { EventPlowsharesPitchforks } from './plowsharesAndPitchforks';
 
 export class HuntEvent {
 
@@ -12,6 +13,7 @@ export class HuntEvent {
     const eventClasses = {
       bloodshed_bileweavers: EventBloodshedBileweavers,
       death_rites: EventDeathRites,
+      plowshares_and_pitchforks: EventPlowsharesPitchforks,
       // add future events here
       // example: another_event: event_another_event,
     };

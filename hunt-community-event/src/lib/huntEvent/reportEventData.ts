@@ -144,6 +144,31 @@ function formatEventMessage(
     }
   }
 
+  if (slug === "plowshares_and_pitchforks") {
+    const { redneckRampage, theSowers } = data;
+
+    if (typeof redneckRampage === "number" && typeof theSowers === "number") {
+      const embed = new EmbedBuilder()
+        .setTitle("Event Update")
+        .setDescription("The battle for Moses Poultry rages on - will the family farm survive?")
+        .setColor(0xb45309)
+        .setTimestamp(new Date())
+        .addFields(
+          { name: "Redneck Rampage", value: redneckRampage.toLocaleString(), inline: true },
+          { name: "The Sowers", value: theSowers.toLocaleString(), inline: true },
+        )
+        .setFooter({ text: "HuntCET", iconURL: "https://huntcet.com/icon.png" });
+
+      const thumbnailUrl = resolveBotImageUrl(botImagePath);
+
+      if (thumbnailUrl) {
+        embed.setThumbnail(thumbnailUrl);
+      }
+
+      return { embeds: [embed] };
+    }
+  }
+
   return buildFallbackEmbed(slug, data, botImagePath);
 }
 
@@ -277,4 +302,3 @@ function formatDataFields(data: Record<string, unknown>) {
     }))
     .filter(({ value }) => value.toString().trim().length > 0);
 }
-
